@@ -14,7 +14,6 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.groups.Default;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
@@ -58,7 +57,7 @@ public class Member {
     @Column(name = "mailing_address", nullable = true)
     private Address mailingAddress;
 
-    @OneToMany(mappedBy = "member_id")
+    @OneToMany
     @Column(name = "enrollments")
     private List<Enrollment> enrollments;
 }

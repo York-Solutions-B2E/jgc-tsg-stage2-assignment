@@ -24,8 +24,8 @@ public class Plan {
     @Column(columnDefinition = "VARCHAR(23)", name = "name", nullable = false, unique = true, length = 23)
     private String name;
 
-    @Column(columnDefinition = "VARCHAR(7)", name = "plan_type", nullable = false, length = 7)
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(7)", name = "plan_type", nullable = false, length = 7)
     private PlanType type;
 
     // Network name, like "Prime"
