@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres
+    container_name: tsg-stage2-db
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: tsgstage2db
+      POSTGRES_PASSWORD: password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      
+volumes:
+  pgdata:
