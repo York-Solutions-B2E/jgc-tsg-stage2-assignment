@@ -25,28 +25,25 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", columnDefinition = "UUID", nullable = false, unique = true)
+    @Column(columnDefinition = "UUID", name = "id", nullable = false, unique = true)
     private UUID id;
 
     // Foreign key: User
-    @Column(name = "user_id", columnDefinition = "UUID", nullable = false, unique = true)
+    @Column(columnDefinition = "UUID", name = "user_id", nullable = false, unique = true)
     private UUID userId;
 
-    @Size(max = 63)
-    @Column(name = "first_name", columnDefinition = "VARCHAR(63)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(63)", name = "first_name", nullable = false, length = 63)
     private String firstName;
 
-    @Size(max = 63)
-    @Column(name = "last_name", columnDefinition = "VARCHAR(63)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(63)", name = "last_name", nullable = false, length = 63)
     private String lastName;
 
     @Column(name = "date_of_birth", columnDefinition = "DATE", nullable = false)
     private LocalDate dateOfBirth;
 
     @Null(groups = Default.class) // Use a validation group to allow this field to be optional
-    @Size(max = 254, groups = Default.class)
     @Email(message = "Invalid email format", groups = Default.class)
-    @Column(name = "email", columnDefinition = "VARCHAR(254)", nullable = true)
+    @Column(columnDefinition = "VARCHAR(254)", name = "email", nullable = true, length = 254)
     private String email;
 
     @Null(groups = Default.class)
@@ -54,11 +51,7 @@ public class Member {
              message = "Invalid phone number format",
              groups = Default.class)
     @Size(min = 8, max = 20, groups = Default.class)
-    @Column(
-        name = "phone",
-        nullable = true,
-        columnDefinition = "VARCHAR(20)"
-    )
+    @Column(columnDefinition = "VARCHAR(20)", name = "phone", nullable = true, length = 20)
     private String phone;
 
     @Embedded

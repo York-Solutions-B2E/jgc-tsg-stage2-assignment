@@ -11,7 +11,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
 
@@ -21,21 +20,19 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", columnDefinition = "UUID", nullable = false, unique = true)
+    @Column(columnDefinition = "UUID", name = "id", nullable = false, unique = true)
     private UUID id;
 
     // Auth provider, like Google or Okta
-    @Size(max = 31)
-    @Column(name = "auth_provider", columnDefinition = "VARCHAR(31)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(31)", name = "auth_provider", nullable = false, length = 31)
     private String authProvider;
 
     // OIDC subject
-    @Column(name = "auth_sub", columnDefinition = "TEXT", nullable = false)
+    @Column(columnDefinition = "VARCHAR(255)", name = "auth_sub", nullable = false, length = 255)
     private String authSub;
 
-    @Size(max = 254)
     @Email(message = "Invalid email format")
-    @Column(name = "email", columnDefinition = "VARCHAR(254)", nullable = false, unique = true)
+    @Column(columnDefinition = "VARCHAR(254)", name = "email", nullable = false, unique = true, length = 254)
     private String email;
 
     @Column(name = "created_at", columnDefinition = "TIMESTAMP", nullable = false)
