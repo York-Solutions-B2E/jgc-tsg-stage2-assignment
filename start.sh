@@ -26,7 +26,8 @@ function after-db {
     # Navigate to the back-end directory
     cd "$tsgbackenddir"
     # Clean the workspace, build the back-end, and run the back-end
-    ./mvnw clean package && java -jar target/tsg-stage2-0.0.1-SNAPSHOT.jar
+    # ./mvnw clean package && java -jar target/tsg-stage2-0.0.1-SNAPSHOT.jar
+    ./mvnw clean package spring-boot:run
 }
 
 function await-live {
