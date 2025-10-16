@@ -17,27 +17,27 @@ public class Accumulator {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "UUID", name = "id", nullable = false, unique = true)
+    @Column(columnDefinition = "UUID", nullable = false, unique = true)
     private UUID id;
 
-    @Column(columnDefinition = "UUID", name = "enrollment_id", nullable = false)
+    @Column(columnDefinition = "UUID", nullable = false)
     private UUID enrollmentId;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(15)", name = "type", nullable = false, length = 15)
+    @Column(columnDefinition = "VARCHAR(15)", nullable = false, length = 15)
     private AccumulatorType type;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(15)", name = "tier", nullable = false, length = 15)
+    @Column(columnDefinition = "VARCHAR(15)", nullable = false, length = 15)
     private NetworkTier tier;
 
     // 000.00
-    @Column(columnDefinition = "NUMERIC(23,2)", name = "limit_amount",
+    @Column(columnDefinition = "NUMERIC(23,2)",
             nullable = false, precision = 23, scale = 2)
     private BigDecimal limitAmount;
 
     // 000.00
-    @Column(columnDefinition = "NUMERIC(23,2)", name = "used_amount",
+    @Column(columnDefinition = "NUMERIC(23,2)",
             nullable = false, precision = 23, scale = 2)
     private BigDecimal usedAmount;
 }

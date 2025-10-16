@@ -20,26 +20,26 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "UUID", name = "id", nullable = false, unique = true)
+    @Column(columnDefinition = "UUID", nullable = false, unique = true)
     private UUID id;
 
     // Auth provider, like Google or Okta
-    @Column(columnDefinition = "VARCHAR(31)", name = "auth_provider", nullable = false, length = 31)
+    @Column(columnDefinition = "VARCHAR(31)", nullable = false, length = 31)
     private String authProvider;
 
     // OIDC subject
-    @Column(columnDefinition = "VARCHAR(255)", name = "auth_sub", nullable = false, length = 255)
+    @Column(columnDefinition = "VARCHAR(255)", nullable = false, length = 255)
     private String authSub;
 
     @Email(message = "Invalid email format")
-    @Column(columnDefinition = "VARCHAR(254)", name = "email", nullable = false, unique = true, length = 254)
+    @Column(columnDefinition = "VARCHAR(254)", nullable = false, unique = true, length = 254)
     private String email;
 
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP", nullable = false)
+    @Column(columnDefinition = "TIMESTAMP", nullable = false)
     @CreationTimestamp
     private OffsetDateTime createdAt;
 
-    @Column(name = "updated_at", columnDefinition = "TIMESTAMP", nullable = false)
+    @Column(columnDefinition = "TIMESTAMP", nullable = false)
     @UpdateTimestamp
     private OffsetDateTime updatedAt;
 }

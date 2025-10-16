@@ -17,21 +17,21 @@ public class Plan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "UUID", name = "id", nullable = false, unique = true)
+    @Column(columnDefinition = "UUID", nullable = false, unique = true)
     private UUID id;
 
     // Plan name, like "Gold PPO"
-    @Column(columnDefinition = "VARCHAR(23)", name = "name", nullable = false, unique = true, length = 23)
+    @Column(columnDefinition = "VARCHAR(23)", nullable = false, unique = true, length = 23)
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(7)", name = "plan_type", nullable = false, length = 7)
+    @Column(columnDefinition = "VARCHAR(7)", nullable = false, length = 7)
     private PlanType type;
 
     // Network name, like "Prime"
-    @Column(columnDefinition = "VARCHAR(63)", name = "network_name", nullable = false, length = 63)
+    @Column(columnDefinition = "VARCHAR(63)", nullable = false, length = 63)
     private String networkName;
 
-    @Column(columnDefinition = "INTEGER", name = "plan_year", nullable = false)
+    @Column(columnDefinition = "INTEGER", nullable = false)
     private Integer planYear;
 }

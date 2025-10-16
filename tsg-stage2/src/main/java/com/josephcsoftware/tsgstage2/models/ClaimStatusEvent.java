@@ -17,19 +17,19 @@ public class ClaimStatusEvent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "UUID", name = "id", nullable = false, unique = true)
+    @Column(columnDefinition = "UUID", nullable = false, unique = true)
     private UUID id;
 
-    @Column(columnDefinition = "UUID", name = "claim_id", nullable = false)
+    @Column(columnDefinition = "UUID", nullable = false)
     private UUID claimId;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(15)", name = "status", nullable = false, length = 15)
+    @Column(columnDefinition = "VARCHAR(15)", nullable = false, length = 15)
     private ClaimStatus status;
 
-    @Column(columnDefinition = "TIMESTAMP", name = "occurred_at", nullable = false)
+    @Column(columnDefinition = "TIMESTAMP", nullable = false)
     private OffsetDateTime occurredAt;
 
-    @Column(columnDefinition = "TEXT", name = "note", nullable = true)
+    @Column(columnDefinition = "TEXT", nullable = true)
     private String note;
 }

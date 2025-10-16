@@ -17,25 +17,25 @@ public class Enrollment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "UUID", name = "id", nullable = false, unique = true)
+    @Column(columnDefinition = "UUID", nullable = false, unique = true)
     private UUID id;
 
-    @Column(columnDefinition = "UUID", name = "member_id", nullable = false)
+    @Column(columnDefinition = "UUID", nullable = false)
     private UUID memberId;
 
-    @Column(columnDefinition = "UUID", name = "plan_id", nullable = false)
+    @Column(columnDefinition = "UUID", nullable = false)
     private UUID planId;
 
-    @Column(columnDefinition = "DATE", name = "coverage_start", nullable = false)
+    @Column(columnDefinition = "DATE", nullable = false)
     private LocalDate coverageStart;
 
-    @Column(columnDefinition = "DATE", name = "coverage_end", nullable = false)
+    @Column(columnDefinition = "DATE", nullable = false)
     private LocalDate coverageEnd;
 
-    @Column(name = "active", nullable = false)
+    @Column(nullable = false)
     private Boolean active;
 
     @OneToMany
-    @Column(name = "accumulators")
+    @Column
     private List<Accumulator> accumulators;
 }
