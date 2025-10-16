@@ -4,10 +4,11 @@ import com.josephcsoftware.tsgstage2.services.UserService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/public/users")
 public class UserController {
 
     private final UserService userService;
@@ -16,9 +17,9 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
-    public String getHelloWorld() {
-        return "Hello world!";
+    @GetMapping("/hello")
+    public ResponseEntity<String> getHelloWorld() {
+        return ResponseEntity.ok("Hello world!");
     }
     
 }
