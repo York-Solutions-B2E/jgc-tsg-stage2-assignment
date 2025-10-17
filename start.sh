@@ -21,6 +21,24 @@ function get-script-dir {
 scriptdir=$(get-script-dir)
 tsgbackenddir="$scriptdir/tsg-stage2"
 tsgdbdir="$scriptdir/db"
+tsgclientidpath="$scriptdir/client-id.txt"
+tsgclientsecretpath="$scriptdir/client-secret.txt"
+
+if [ ! -f "$tsgclientidpath" ]; then
+    echo "ERROR: Missing client-id.txt at $tsgclientidpath"
+    echo "You will need to set up a Google Oauth client at the Google Cloud Dashboard."
+    exit 1
+fi
+
+export GOOGLE_CLIENT_ID=$(cat "$tsgclientidpath")
+
+if [ ! -f "$tsgclientsecretpath" ]; then
+    echo "ERROR: Missing client-secret.txt at $tsgclientsecretpath"
+    echo "You will need to set up a Google Oauth client at the Google Cloud Dashboard."
+    exit 1
+fi
+
+export GOOGLE_CLIENT_SECRET=$(cat "$tsgclientsecretpath")
 
 function after-db {
     # Navigate to the back-end directory
