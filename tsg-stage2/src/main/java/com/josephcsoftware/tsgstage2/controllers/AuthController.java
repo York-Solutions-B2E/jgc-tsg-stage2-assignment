@@ -21,6 +21,7 @@ public class AuthController {
         this.authService = authService;
     }
 
+    // This JWT is the authorization token from Google
     @GetMapping
     public ResponseEntity<Void> validateLogin(@AuthenticationPrincipal Jwt jwt) {
         // Pass the JWT to authService to check for the existence of a user; if none, make one
