@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/api/auth/me")
+@CrossOrigin(origins = "${jgc.cors.origin}")
+@RequestMapping("${jgc.project.root}/auth/me")
 public class AuthController {
 
     private final AuthService authService;

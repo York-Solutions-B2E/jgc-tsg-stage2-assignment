@@ -19,6 +19,9 @@ public class SecurityConfig {
     @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
 	private String jwkSetUri;
 
+    @Value("${jgc.project.root}/auth/**")
+    private String publicSpace;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -30,7 +33,7 @@ public class SecurityConfig {
             // Continue with the permissions/auth chain
             .authorizeHttpRequests(auth -> auth
                                    // We should be able to freely log in
-                                   .requestMatchers("/api/auth/**").permitAll()
+                                   .requestMatchers(this.publicSpace).permitAll()
                                    // Anything else should be locked down
                                    .anyRequest().authenticated()
                                    )
