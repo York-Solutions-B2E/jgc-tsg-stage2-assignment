@@ -69,7 +69,7 @@ function App() {
                             }
                         );
 
-                        if (response.status != HttpStatusCode.Ok) {
+                        if (response.status === HttpStatusCode.Ok) {
                             localStorage.setItem(SESSION_TOKEN_KEY, authToken);
                             //forceUpdate();
                         }
