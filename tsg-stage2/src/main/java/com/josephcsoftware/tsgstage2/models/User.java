@@ -44,4 +44,10 @@ public class User {
     @Column(columnDefinition = "TIMESTAMP", nullable = false)
     @UpdateTimestamp
     private OffsetDateTime updatedAt;
+
+    /*public User(String authProvider, String authSub, String email) {
+        this.authProvider = authProvider;
+        this.authSub = authSub;
+        this.email = email;
+        }*/
 }

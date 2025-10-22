@@ -28,4 +28,24 @@ public class SimpleSession {
             return fallback;
         }
     }
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public String getProvider() {
+		return provider;
+	}
 }

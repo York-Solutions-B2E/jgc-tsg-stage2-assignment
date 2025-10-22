@@ -1,7 +1,9 @@
 package com.josephcsoftware.tsgstage2.controllers;
 
 import com.josephcsoftware.tsgstage2.SimpleSession;
+import com.josephcsoftware.tsgstage2.models.User;
 import com.josephcsoftware.tsgstage2.services.AuthService;
+import com.josephcsoftware.tsgstage2.services.UserService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -27,7 +29,7 @@ public class AuthController {
     @GetMapping("login")
     public ResponseEntity<Void> validateLogin(@AuthenticationPrincipal Jwt jwt) {
         // Pass the JWT to authService to check for the existence of a user; if none, make one
-        SimpleSession foundLogin = authService.verifyLogin(jwt);
+        User foundLogin = authService.findUserByJWT(jwt);
 
         if (foundLogin != null) {
             return ResponseEntity.ok().build();

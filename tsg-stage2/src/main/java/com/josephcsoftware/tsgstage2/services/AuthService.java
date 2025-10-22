@@ -1,6 +1,6 @@
 package com.josephcsoftware.tsgstage2.services;
 
-import com.josephcsoftware.tsgstage2.SimpleSession;
+import com.josephcsoftware.tsgstage2.models.User;
 
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -8,25 +8,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthService {
 
-    private UserService userService;
+    private final UserService userService;
 
-    public AuthService() { }
+    public AuthService(UserService userService) {
+        this.userService = userService;
+    }
 
-    // If a user has an account, then do nothing
-    // If a user has no account, then make one from the JWT
-    public SimpleSession verifyLogin(Jwt jwt) {
-        try {
-            SimpleSession session = new SimpleSession(jwt);
-
-            userService.ensureExistenceOfUser(session);
-        
-            return session;
-        } catch (Exception ex) {
-            // SimpleSession creation already has some error handling,
-            // so if we still get an error here, then something has gone
-            // VERY wrong.
-            System.out.println(ex);
-            return null;
-        }
+    public User findUserByJWT(Jwt jwt) {
+        return userService.findUserByJWT(jwt);
     }
 }
