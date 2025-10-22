@@ -9,12 +9,13 @@ At this time, the start script is only available for Unix systems (Linux, MacOS)
 ```Bash
 git clone https://github.com/York-Solutions-B2E/jgc-tsg-stage2-assignment.git
 cd jgc-tsg-stage2-assignment
-./start.sh
+./start-back.sh
 ```
 
-Then, open a new terminal/shell in the repo's directory, and run the following:
+Then, open a new terminal/shell in the cloned repo's directory, and run the following:
 
 ```Bash
-cd front-end
-npm run build && npm run preview
+./start-front.sh
 ```
+
+Both of these scripts can be safely ended with <kbd>CTRL</kbd>+<kbd>C</kbd>.

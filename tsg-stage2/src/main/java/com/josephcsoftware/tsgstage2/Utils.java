@@ -80,9 +80,9 @@ public final class Utils {
         return shuffled.toArray(new String[shuffled.size()]);
     }
 
-    public static LocalDate randomDateBetween(LocalDate startDate, LocalDate endDate) throws NullPointerException {
-        if (startDate == null) throw new NullPointerException("Start date cannot be null.");
-        if (endDate == null) throw new NullPointerException("End date cannot be null.");
+    public static LocalDate randomDateBetween(LocalDate startDate, LocalDate endDate) {
+        if (startDate == null) throw new IllegalArgumentException("Start date cannot be null.");
+        if (endDate == null) throw new IllegalArgumentException("End date cannot be null.");
         
         if (endDate.isBefore(startDate)) {
             throw new IllegalArgumentException("End date must be after start date.");
