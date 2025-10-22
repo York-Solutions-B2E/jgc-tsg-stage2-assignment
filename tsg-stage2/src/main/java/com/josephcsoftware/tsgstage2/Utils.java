@@ -10,6 +10,58 @@ public final class Utils {
     // This class will be for static methods only
     private Utils() { }
 
+    // Descriptions for what the hospital bills are for
+    private const String[] SILLY_REASONS = {
+        "The vibe was off",
+        "Groove needed restoration",
+        "Steeze needed repair",
+        "Four-dimensional spine realignment",
+        "Upside-down kidneys",
+        "Knees halfway down arms",
+        "Extra eyebrows",
+        "Double mustache",
+        "Pelvic floor wax",
+        "Face got stuck that way",
+        "Stolen nose (hey give that back)",
+        "Inside-out hairs",
+        "Insufficient backface culling",
+        "Failed backflip",
+        "Sad",
+        "A wonderfully and spectacularly terrible idea",
+        "Underground skydiving recovery",
+        "Vacuous elbows",
+        "Staring contest with Medusa",
+        "Abs were too chiseled",
+        "Tis but a flesh wound",
+        "Insufficient cowbell",
+        "Hemineglect",
+        "Excess of butterflies in stomach",
+        "Heart in throat",
+        "Owl mimicry",
+        "Haunted",
+        "Found out",
+        "Wrought a brand-new illness upon humankind",
+        "Looked at me weird",
+        "Excessively-silly walk",
+        "Swapped hips and shoulders",
+        "Haven't the faintest clue",
+        "Taxes",
+        "Bird-related injuries",
+        "Fake glasses became real glasses",
+        "Yearning to bite",
+        "Casual comatose",
+        "Disco",
+        "Overly-reticulated splines",
+        "The Accursed Tickle",
+        "Medical drama scene",
+        "Going viral on TikTok",
+        "Too many eyes",
+        "Interrupted by a shark",
+        "Challenged a bus and won",
+        "Pre-Cambrian disease",
+        "Foo-Bar Syndrome"
+    };
+
     public static LocalDate randomDateBetween(LocalDate startDate, LocalDate endDate) {
         Objects.requireNonNull(startDate, "Start date cannot be null.");
         Objects.requireNonNull(endDate, "End date cannot be null.");
