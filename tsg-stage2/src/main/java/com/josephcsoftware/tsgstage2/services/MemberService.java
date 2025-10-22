@@ -1,5 +1,12 @@
 package com.josephcsoftware.tsgstage2.services;
 
+import java.time.LocalDate;
+import java.util.UUID;
+
+import com.josephcsoftware.tsgstage2.SimpleSession;
+import com.josephcsoftware.tsgstage2.Utils;
+import com.josephcsoftware.tsgstage2.models.Address;
+import com.josephcsoftware.tsgstage2.models.Member;
 import com.josephcsoftware.tsgstage2.repositories.MemberRepository;
 
 import org.springframework.stereotype.Service;
@@ -11,5 +18,29 @@ public class MemberService {
 
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
+    }
+
+    public Member createMember(UUID userId, SimpleSession session) {
+        Member newMember = new Member();
+        newMember.setUserId(userId);
+        newMember.setFirstName(session.getFirstName());
+        newMember.setLastName(session.getLastName());
+        newMember.setDateOfBirth(
+                                 Utils.randomDateBetween(
+                                                         Utils.randomInYear(1980),
+                                                         Utils.randomInYear(2000)
+                                                         )
+                                 );
+        newMember.setEmail(session.getEmail());
+        // Legally, it's best to use the stereotypical phone number
+        newMember.setPhone("(555) 555-5555");
+
+        newMember.setMailingAddress(Utils.randomClientAddress());
+
+        memberRepository.save(newMember);
+
+        //TODO: Enrollments
+
+        return newMember;
     }
 }

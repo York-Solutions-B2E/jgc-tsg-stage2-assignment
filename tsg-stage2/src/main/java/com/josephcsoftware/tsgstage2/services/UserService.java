@@ -1,8 +1,10 @@
 package com.josephcsoftware.tsgstage2.services;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.josephcsoftware.tsgstage2.SimpleSession;
+import com.josephcsoftware.tsgstage2.models.Member;
 import com.josephcsoftware.tsgstage2.models.User;
 import com.josephcsoftware.tsgstage2.repositories.UserRepository;
 
@@ -14,8 +16,15 @@ public class UserService {
     
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    // Other services for creating new data
+    private final MemberService memberService;
+
+    public UserService(
+                       UserRepository userRepository,
+                       MemberService memberService
+                       ) {
         this.userRepository = userRepository;
+        this.memberService = memberService;
     }
 
     // Tries to retrieve a user.
@@ -39,6 +48,11 @@ public class UserService {
         newUser.setAuthProvider(session.getProvider());
         newUser.setEmail(session.getEmail());
         userRepository.save(newUser);
+
+        UUID userId = newUser.getId();
+
+        // Create the member
+        Member member = memberService.createMember(userId, session);
 
         return null;
     }
