@@ -27,8 +27,8 @@ public class MemberService {
         newMember.setLastName(session.getLastName());
         newMember.setDateOfBirth(
                                  Utils.randomDateBetween(
-                                                         Utils.randomInYear(1980),
-                                                         Utils.randomInYear(2000)
+                                                         Utils.randomInYear(1975),
+                                                         Utils.randomInYear(1995)
                                                          )
                                  );
         newMember.setEmail(session.getEmail());

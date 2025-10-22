@@ -1,6 +1,8 @@
 package com.josephcsoftware.tsgstage2;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.josephcsoftware.tsgstage2.models.Address;
@@ -11,7 +13,7 @@ public final class Utils {
     private Utils() { }
 
     // Descriptions for what the hospital bills are for
-    private const String[] SILLY_REASONS = {
+    private static final String[] SILLY_REASONS = {
         "The vibe was off",
         "Groove needed restoration",
         "Steeze needed repair",
@@ -62,9 +64,25 @@ public final class Utils {
         "Foo-Bar Syndrome"
     };
 
-    public static LocalDate randomDateBetween(LocalDate startDate, LocalDate endDate) {
-        Objects.requireNonNull(startDate, "Start date cannot be null.");
-        Objects.requireNonNull(endDate, "End date cannot be null.");
+    public static String[] randomReasons() {
+        ArrayList<String> pool = new ArrayList<String>();
+        ArrayList<String> shuffled = new ArrayList<String>();
+
+        for (int i = 0; i < SILLY_REASONS.length; i++) {
+            pool.add(SILLY_REASONS[i]);
+        }
+
+        // Randomly pick from the pool
+        while (pool.size() > 0) {
+            shuffled.add(pool.remove(ThreadLocalRandom.current().nextInt(pool.size())));
+        }
+
+        return shuffled.toArray(new String[shuffled.size()]);
+    }
+
+    public static LocalDate randomDateBetween(LocalDate startDate, LocalDate endDate) throws NullPointerException {
+        if (startDate == null) throw new NullPointerException("Start date cannot be null.");
+        if (endDate == null) throw new NullPointerException("End date cannot be null.");
         
         if (endDate.isBefore(startDate)) {
             throw new IllegalArgumentException("End date must be after start date.");
@@ -77,17 +95,25 @@ public final class Utils {
     }
 
     public static LocalDate randomInYear(int year) {
-        int randomDays = ThreadLocalRandom.current().nextLong(365);
+        int randomDays = ThreadLocalRandom.current().nextInt(365);
         return LocalDate.ofYearDay(year, randomDays);
     }
 
-    private static String randomString(String[] choices) {
-        int index = ThreadLocalRandom.current().nextInt(choices.length());
-        return choices[index]
+    private static int randomIndex(String[] choices) {
+        return ThreadLocalRandom.current().nextInt(choices.length);
     }
 
-    private const String[] STREET_SIDES = { "N", "S", "E", "W" };
-    private const String[] APARTMENT_SIDES = { "A", "B", "C", "D" };
+    private static int randomIndex(ArrayList<String> choices) {
+        return ThreadLocalRandom.current().nextInt(choices.size());
+    }
+
+    private static String randomString(String[] choices) {
+        int index = randomIndex(choices);
+        return choices[index];
+    }
+
+    private static final String[] STREET_SIDES = { "N", "S", "E", "W" };
+    private static final String[] APARTMENT_SIDES = { "A", "B", "C", "D" };
 
     // For getting address sides, like NESW for streets, and ABCD for apartments
     private static String randomSide(String[] sides, String prefix, String suffix) {
@@ -96,7 +122,7 @@ public final class Utils {
         return prefix + randomString(sides) + suffix;
     }
 
-    private const String[][] CITIES = {
+    private static final String[][] CITIES = {
         {"New York City", "NY", "10024"},
         {"Los Angeles", "CA", "90041"},
         {"Chicago", "IL", "60610"},
@@ -110,17 +136,17 @@ public final class Utils {
     };
 
     private static void setGeoLocation(Address address) {
-        String[] geoLocation = CITIES[ThreadLocalRandom.current().nextInt(CITIES.length())];
+        String[] geoLocation = CITIES[ThreadLocalRandom.current().nextInt(CITIES.length)];
 
-        clientAddress.setCity(geoLocation[0]);
-        clientAddress.setState(geoLocation[1]);
-        clientAddress.setPostalCode(geoLocation[2]);
+        address.setCity(geoLocation[0]);
+        address.setState(geoLocation[1]);
+        address.setPostalCode(geoLocation[2]);
     }
 
     // Named comedically, to explain why a client
     // would rack up so many hospital visits in the
     // insurance nightmare that is the USA.
-    private const String[] CLIENT_STREETS = {
+    private static final String[] CLIENT_STREETS = {
         "Wonder St",
         "Danger Rd",
         "Reckless Ave",
@@ -133,7 +159,7 @@ public final class Utils {
         "Cannon Ave"
     };
 
-    private const String[] PROVIDER_STREETS = {
+    private static final String[] PROVIDER_STREETS = {
         "Fixer St",
         "Bandage Blvd",
         "Healer Hwy",
@@ -147,7 +173,7 @@ public final class Utils {
     };
 
     private static String randomStreetNumber() {
-        String ret = (ThreadLocalRandom.current().nextInt(99900) + 100).toString();
+        String ret = "" + (ThreadLocalRandom.current().nextInt(99900) + 100);
         return ret + randomSide(STREET_SIDES, " ", "");
     }
 
@@ -162,7 +188,7 @@ public final class Utils {
 
         clientAddress.setLine1(randomStreet(CLIENT_STREETS));
 
-        String aptNumber = "APT " + (ThreadLocalRandom.current().nextInt(500) + 1).toString();
+        String aptNumber = "APT " + (ThreadLocalRandom.current().nextInt(500) + 1);
         aptNumber += randomSide(APARTMENT_SIDES, "", "");
 
         clientAddress.setLine2(aptNumber);
