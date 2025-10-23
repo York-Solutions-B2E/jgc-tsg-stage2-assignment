@@ -9,7 +9,9 @@ import com.josephcsoftware.tsgstage2.SimpleSession;
 import com.josephcsoftware.tsgstage2.Utils;
 import com.josephcsoftware.tsgstage2.models.Claim;
 import com.josephcsoftware.tsgstage2.models.ClaimLine;
+import com.josephcsoftware.tsgstage2.models.Enrollment;
 import com.josephcsoftware.tsgstage2.models.Member;
+import com.josephcsoftware.tsgstage2.models.Plan;
 import com.josephcsoftware.tsgstage2.models.Provider;
 import com.josephcsoftware.tsgstage2.models.User;
 import com.josephcsoftware.tsgstage2.repositories.UserRepository;
@@ -26,17 +28,23 @@ public class UserService {
     private final MemberService memberService;
     private final ProviderService providerService;
     private final ClaimService claimService;
+    private final PlanService planService;
+    private final EnrollmentService enrollmentService;
 
     public UserService(
                        UserRepository userRepository,
                        MemberService memberService,
                        ProviderService providerService,
-                       ClaimService claimService
+                       ClaimService claimService,
+                       PlanService planService,
+                       EnrollmentService enrollmentService
                        ) {
         this.userRepository = userRepository;
         this.memberService = memberService;
         this.providerService = providerService;
         this.claimService = claimService;
+        this.planService = planService;
+        this.enrollmentService = enrollmentService;
     }
 
     // Tries to retrieve a user.
@@ -54,6 +62,7 @@ public class UserService {
         // just pulling the first one we find.
         if (userList.size() > 0) {
             User foundUser = userList.get(0);
+            System.out.println("Found existing user: " + session.getEmail());
             return foundUser;
         }
 
@@ -120,9 +129,25 @@ public class UserService {
             }
         }
 
-        //TODO: Make plans, enrollments, and accumulators
+        // Create plans and enrollments
+        ArrayList<Enrollment> enrollments = new ArrayList<Enrollment>();
+        for (int i = 0; i < yearsActive; i++) {
+            Plan newPlan = planService.createPlan(Utils.START_YEAR + i);
+            enrollments.add(enrollmentService.createEnrollment(
+                                                               member.getId(),
+                                                               newPlan.getId(),
+                                                               Utils.START_YEAR + yearsActive,
+                                                               i == yearsActive - 1,
+                                                               timeSortedClaims[i]
+                                                               )
+                            );
+        }
 
-        return null;
+        memberService.enrollMember(member, enrollments);
+
+        // Aaaaaand done!
+        System.out.println("New user created: " + session.getEmail());
+        return newUser;
     }
 
     // If a user has an account, then do nothing

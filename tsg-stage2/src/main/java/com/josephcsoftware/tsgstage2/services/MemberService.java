@@ -45,4 +45,9 @@ public class MemberService {
 
         return newMember;
     }
+
+    public void enrollMember(Member member, ArrayList<Enrollment> enrollments) {
+        member.setEnrollments(enrollments);
+        memberRepository.save(member);
+    }
 }

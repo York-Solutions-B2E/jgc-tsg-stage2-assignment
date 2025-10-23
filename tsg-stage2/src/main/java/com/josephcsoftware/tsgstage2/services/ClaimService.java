@@ -68,10 +68,10 @@ public class ClaimService {
         history.add(claimStatusEventService.createEvent(myId, ClaimStatus.PAID));
 
         // Set up claim lines
-        BigDecimal totalBilled = BigDecimal.valueOf(0);
-        BigDecimal totalAllowed = BigDecimal.valueOf(0);
-        BigDecimal totalPlanPaid = BigDecimal.valueOf(0);
-        BigDecimal totalMemberResponsibility = BigDecimal.valueOf(0);
+        BigDecimal totalBilled = BigDecimal.valueOf(0, 2);
+        BigDecimal totalAllowed = totalBilled;
+        BigDecimal totalPlanPaid = totalBilled;
+        BigDecimal totalMemberResponsibility = totalBilled;
         for (int i = 0; i < reasons.length; i++) {
             ClaimLine line = claimLineService.createLine(
                                                          i + 1,
@@ -81,10 +81,10 @@ public class ClaimService {
             lines.add(line);
 
             // Add to totals
-            totalBilled.add(line.getBilledAmount());
-            totalAllowed.add(line.getAllowedAmount());
-            totalPlanPaid.add(line.getPlanPaid());
-            totalMemberResponsibility.add(line.getMemberResponsibility());
+            totalBilled = totalBilled.add(line.getBilledAmount());
+            totalAllowed = totalAllowed.add(line.getAllowedAmount());
+            totalPlanPaid = totalPlanPaid.add(line.getPlanPaid());
+            totalMemberResponsibility = totalMemberResponsibility.add(line.getMemberResponsibility());
         }
         
         // Save lists

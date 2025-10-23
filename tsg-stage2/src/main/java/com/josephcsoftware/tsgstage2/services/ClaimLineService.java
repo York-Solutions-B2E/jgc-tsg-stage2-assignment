@@ -19,10 +19,10 @@ public class ClaimLineService {
         this.claimLineRepository = claimLineRepository;
     }
 
-    private static float randomCost(float min, float max) {
+    private static BigDecimal randomCost(float min, float max) {
         float precise = ThreadLocalRandom.current().nextFloat(max - min) + min;
-        float rounded = Math.round(precise * 100f) / 100f;
-        return rounded;
+        float rounded = Math.round(precise * 100f);
+        return BigDecimal.valueOf((long)rounded, 2);
     }
 
     public ClaimLine createLine(int lineNumber, UUID claimId, String reason) {
@@ -34,29 +34,32 @@ public class ClaimLineService {
         newLine.setCptCode(Utils.randomCode());
 
         // Set standard allowed amount
-        newLine.setAllowedAmount(BigDecimal.valueOf(Utils.STANDARD_ALLOWED_AMOUNT));
+        newLine.setAllowedAmount(BigDecimal.valueOf(Utils.STANDARD_ALLOWED_AMOUNT, 2));
 
         // Set initial cost (1x to 5x of allowed amount)
-        float initialCost = randomCost(
-                                      (float)Utils.STANDARD_ALLOWED_AMOUNT,
-                                      (float)Utils.STANDARD_ALLOWED_AMOUNT * 5f
-                                      );
-        newLine.setBilledAmount(BigDecimal.valueOf(initialCost));
+        newLine.setBilledAmount(randomCost(
+                                           Utils.STANDARD_ALLOWED_AMOUNT,
+                                           Utils.STANDARD_ALLOWED_AMOUNT * 5f
+                                           )
+                                );
 
         // Set copay
-        float copay = randomCost(20f, 50f);
-        newLine.setCopayApplied(BigDecimal.valueOf(copay));
+        BigDecimal copay = randomCost(20f, 50f);
+        newLine.setCopayApplied(copay);
 
         // Set deductible
-        newLine.setDeductibleApplied(BigDecimal.valueOf(Utils.STANDARD_ALLOWED_AMOUNT));
+        BigDecimal deductible = BigDecimal.valueOf(Utils.STANDARD_ALLOWED_AMOUNT, 2);
+        newLine.setDeductibleApplied(deductible);
 
         // None of these examples will meet the deductible,
         // so we can zero these next two values
-        newLine.setCoinsuranceApplied(BigDecimal.valueOf(0));
-        newLine.setPlanPaid(BigDecimal.valueOf(0));
+        BigDecimal zero = BigDecimal.valueOf(0, 2);
+        newLine.setCoinsuranceApplied(zero);
+        newLine.setPlanPaid(zero);
 
         // Set the member responsibility
-        newLine.setMemberResponsibility(BigDecimal.valueOf(Utils.STANDARD_ALLOWED_AMOUNT + copay));
+        BigDecimal responsibility = deductible.add(copay);
+        newLine.setMemberResponsibility(responsibility);
 
         claimLineRepository.save(newLine);
 
