@@ -9,6 +9,8 @@ import com.josephcsoftware.tsgstage2.models.Address;
 
 public final class Utils {
 
+    public static final int START_YEAR = 2022;
+
     // This class will be for static methods only
     private Utils() { }
 
@@ -92,6 +94,10 @@ public final class Utils {
         long randomDays = ThreadLocalRandom.current().nextLong(range + 1);
         
         return startDate.plusDays(randomDays);
+    }
+
+    public static String randomCode() {
+        return "" + (ThreadLocalRandom.current().nextInt(90000) + 10000);
     }
 
     public static LocalDate randomInYear(int year) {
