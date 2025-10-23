@@ -3,6 +3,7 @@ package com.josephcsoftware.tsgstage2.services;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.josephcsoftware.tsgstage2.SimpleSession;
@@ -50,20 +51,19 @@ public class UserService {
     // Tries to retrieve a user.
     // If this fails, then a new one is created.
     public User findUserBySession(SimpleSession session) {
-        List<User> userList = userRepository
-            .findByEmailAndAuthSubAndAuthProvider(
-                                                  session.getEmail(),
-                                                  session.getSubject(),
-                                                  session.getProvider()
-                                                  );
+        System.out.println("Searching by: " + session.getSubject());
+        Optional<User> userResult = userRepository.findByAuthSub(session.getSubject());
 
         // There should only be 1 or 0 results in this list,
         // but also the time is gettin' crunchyyyyyy, so we're
         // just pulling the first one we find.
-        if (userList.size() > 0) {
-            User foundUser = userList.get(0);
-            System.out.println("Found existing user: " + session.getEmail());
-            return foundUser;
+        if (userResult.isPresent()) {
+            User foundUser = userResult.get();
+            if (foundUser != null) {
+                System.out.println("Found existing user: " + foundUser.getEmail());
+                System.out.println("                     " + foundUser.getId().toString());
+                return foundUser;
+            }
         }
 
         // If we made it this far, then no matching user was found,

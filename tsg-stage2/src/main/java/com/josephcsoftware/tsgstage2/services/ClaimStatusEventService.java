@@ -1,5 +1,6 @@
 package com.josephcsoftware.tsgstage2.services;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import com.josephcsoftware.tsgstage2.models.ClaimStatus;
@@ -17,10 +18,11 @@ public class ClaimStatusEventService {
         this.claimStatusEventRepository = claimStatusEventRepository;
     }
 
-    public ClaimStatusEvent createEvent(UUID claimId, ClaimStatus status) {
+    public ClaimStatusEvent createEvent(UUID claimId, ClaimStatus status, OffsetDateTime at) {
         ClaimStatusEvent newEvent = new ClaimStatusEvent();
         newEvent.setClaimId(claimId);
         newEvent.setStatus(status);
+        newEvent.setOccurredAt(at);
         claimStatusEventRepository.save(newEvent);
         return newEvent;
     }

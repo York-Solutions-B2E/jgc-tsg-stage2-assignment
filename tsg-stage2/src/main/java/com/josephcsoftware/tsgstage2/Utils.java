@@ -187,7 +187,7 @@ public final class Utils {
     }
 
     private static String randomStreet(String streets[]) {
-        return randomStreetNumber() + randomString(streets);
+        return randomStreetNumber() + " " + randomString(streets);
     }
 
     public static Address randomClientAddress() {
@@ -211,6 +211,7 @@ public final class Utils {
         setGeoLocation(providerAddress);
 
         providerAddress.setLine1(randomStreet(PROVIDER_STREETS));
+        providerAddress.setLine2("");
 
         return providerAddress;
     }

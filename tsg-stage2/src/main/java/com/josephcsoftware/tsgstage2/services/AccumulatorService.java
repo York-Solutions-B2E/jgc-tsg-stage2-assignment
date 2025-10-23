@@ -51,6 +51,10 @@ public class AccumulatorService {
             }
         }
 
+        // Set amounts
+        newAccumulator.setLimitAmount(limitAmount);
+        newAccumulator.setUsedAmount(usedAmount);
+
         accumulatorRepository.save(newAccumulator);
 
         return newAccumulator;

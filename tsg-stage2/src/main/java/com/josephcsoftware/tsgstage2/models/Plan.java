@@ -23,7 +23,7 @@ public class Plan {
     private UUID id;
 
     // Plan name, like "Gold PPO"
-    @Column(columnDefinition = "VARCHAR(23)", nullable = false, unique = true, length = 23)
+    @Column(columnDefinition = "VARCHAR(23)", nullable = false, length = 23)
     private String name;
 
     @Enumerated(EnumType.STRING)

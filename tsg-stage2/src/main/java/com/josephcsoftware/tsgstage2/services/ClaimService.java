@@ -2,6 +2,9 @@ package com.josephcsoftware.tsgstage2.services;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -47,6 +50,13 @@ public class ClaimService {
         LocalDate reviewed = occurrence.plusDays(1);
         LocalDate processed = occurrence.plusDays(2);
         LocalDate received = occurrence.plusDays(3);
+
+        ZoneOffset cstOffset = ZoneOffset.ofHours(-6);
+        OffsetTime typicalTime = OffsetTime.of(14, 0, 0, 0, cstOffset);
+        OffsetDateTime occurrenceStamp = typicalTime.atDate(occurrence);
+        OffsetDateTime reviewedStamp = typicalTime.atDate(reviewed);
+        OffsetDateTime processedStamp = typicalTime.atDate(processed);
+        OffsetDateTime receivedStamp = typicalTime.atDate(received);
         
         newClaim.setServiceStartDate(occurrence);
         newClaim.setServiceEndDate(occurrence);
@@ -56,22 +66,48 @@ public class ClaimService {
         ArrayList<ClaimStatusEvent> history = new ArrayList<ClaimStatusEvent>();
         ArrayList<ClaimLine> lines = new ArrayList<ClaimLine>();
 
+        BigDecimal totalBilled = BigDecimal.valueOf(0, 2);
+        BigDecimal totalAllowed = totalBilled;
+        BigDecimal totalPlanPaid = totalBilled;
+        BigDecimal totalMemberResponsibility = totalBilled;
+
+        newClaim.setTotalBilled(totalBilled);
+        newClaim.setTotalAllowed(totalAllowed);
+        newClaim.setTotalPlanPaid(totalPlanPaid);
+        newClaim.setTotalMemberResponsibility(totalMemberResponsibility);
+
         // Save now, to let auto-gen fields to populate
         claimRepository.save(newClaim);
 
         UUID myId = newClaim.getId();
 
         // Set up history field
-        history.add(claimStatusEventService.createEvent(myId, ClaimStatus.SUBMITTED));
-        history.add(claimStatusEventService.createEvent(myId, ClaimStatus.IN_REVIEW));
-        history.add(claimStatusEventService.createEvent(myId, ClaimStatus.PROCESSED));
-        history.add(claimStatusEventService.createEvent(myId, ClaimStatus.PAID));
+        history.add(claimStatusEventService.createEvent(
+                                                        myId,
+                                                        ClaimStatus.SUBMITTED,
+                                                        occurrenceStamp
+                                                        )
+                    );
+        history.add(claimStatusEventService.createEvent(
+                                                        myId,
+                                                        ClaimStatus.IN_REVIEW,
+                                                        reviewedStamp
+                                                        )
+                    );
+        history.add(claimStatusEventService.createEvent(
+                                                        myId,
+                                                        ClaimStatus.PROCESSED,
+                                                        processedStamp
+                                                        )
+                    );
+        history.add(claimStatusEventService.createEvent(
+                                                        myId,
+                                                        ClaimStatus.PAID,
+                                                        receivedStamp
+                                                        )
+                    );
 
         // Set up claim lines
-        BigDecimal totalBilled = BigDecimal.valueOf(0, 2);
-        BigDecimal totalAllowed = totalBilled;
-        BigDecimal totalPlanPaid = totalBilled;
-        BigDecimal totalMemberResponsibility = totalBilled;
         for (int i = 0; i < reasons.length; i++) {
             ClaimLine line = claimLineService.createLine(
                                                          i + 1,
@@ -86,6 +122,11 @@ public class ClaimService {
             totalPlanPaid = totalPlanPaid.add(line.getPlanPaid());
             totalMemberResponsibility = totalMemberResponsibility.add(line.getMemberResponsibility());
         }
+
+        newClaim.setTotalBilled(totalBilled);
+        newClaim.setTotalAllowed(totalAllowed);
+        newClaim.setTotalPlanPaid(totalPlanPaid);
+        newClaim.setTotalMemberResponsibility(totalMemberResponsibility);
         
         // Save lists
         newClaim.setStatusHistory(history);

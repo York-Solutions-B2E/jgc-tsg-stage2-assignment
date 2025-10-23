@@ -40,8 +40,8 @@ public class EnrollmentService {
 
         newEnrollment.setMemberId(memberId);
         newEnrollment.setPlanId(planId);
-        newEnrollment.setCoverageStart(LocalDate.ofYearDay(year, 0));
-        newEnrollment.setCoverageStart(LocalDate.ofYearDay(year + 1, 0));
+        newEnrollment.setCoverageStart(LocalDate.ofYearDay(year, 1));
+        newEnrollment.setCoverageEnd(LocalDate.ofYearDay(year + 1, 1));
         newEnrollment.setActive(active);
 
         ArrayList<Accumulator> accumulators = new ArrayList<Accumulator>();
