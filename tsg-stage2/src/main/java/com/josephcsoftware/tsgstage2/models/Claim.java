@@ -50,7 +50,7 @@ public class Claim {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(15)", nullable = false, length = 15)
-    private NetworkTier status;
+    private ClaimStatus status;
 
     // 000.00
     @Column(columnDefinition = "NUMERIC(23,2)",

@@ -1,11 +1,13 @@
 package com.josephcsoftware.tsgstage2.services;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import com.josephcsoftware.tsgstage2.SimpleSession;
 import com.josephcsoftware.tsgstage2.Utils;
 import com.josephcsoftware.tsgstage2.models.Address;
+import com.josephcsoftware.tsgstage2.models.Enrollment;
 import com.josephcsoftware.tsgstage2.models.Member;
 import com.josephcsoftware.tsgstage2.repositories.MemberRepository;
 
@@ -37,9 +39,9 @@ public class MemberService {
 
         newMember.setMailingAddress(Utils.randomClientAddress());
 
-        memberRepository.save(newMember);
+        newMember.setEnrollments(new ArrayList<Enrollment>());
 
-        //TODO: Enrollments
+        memberRepository.save(newMember);
 
         return newMember;
     }

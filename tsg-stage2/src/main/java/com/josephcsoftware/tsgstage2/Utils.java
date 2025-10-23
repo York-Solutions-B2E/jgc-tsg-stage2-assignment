@@ -10,6 +10,9 @@ import com.josephcsoftware.tsgstage2.models.Address;
 public final class Utils {
 
     public static final int START_YEAR = 2022;
+    public static final int STANDARD_ALLOWED_AMOUNT = 100;
+    public static final int STANDARD_ANNUAL_DEDUCTIBLE = 1500;
+    public static final int STANDARD_OOP_MAXIMUM = 6500;
 
     // This class will be for static methods only
     private Utils() { }

@@ -1,5 +1,7 @@
 package com.josephcsoftware.tsgstage2.services;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,12 +49,18 @@ public class UserService {
                                                   session.getProvider()
                                                   );
 
-        if (userList.size() > 0) { // SHOULD be 1, but we're not picky
+        // There should only be 1 or 0 results in this list,
+        // but also the time is gettin' crunchyyyyyy, so we're
+        // just pulling the first one we find.
+        if (userList.size() > 0) {
             User foundUser = userList.get(0);
             return foundUser;
         }
 
-        // None found; create a new one
+        // If we made it this far, then no matching user was found,
+        // so now we undertake the process of creating a new one,
+        // with its own set of demo data for the front-end to show off.
+        
         User newUser = new User();
         newUser.setAuthSub(session.getSubject());
         newUser.setAuthProvider(session.getProvider());
@@ -74,21 +82,45 @@ public class UserService {
         // We want about 2 lines per claim, for a proper demo.
         int numberOfClaims = reasons.length / 2;
         Claim[] claimsInProgress = new Claim[numberOfClaims];
+        ArrayList<String>[] distributedReasons = new ArrayList[numberOfClaims];
 
-        for (int i = 0; i < numberOfClaims; i++) {
-            claimsInProgress[i] = claimService.beginClaim(member.getId(), provider.getId());
-        }
-
+        // Distribute the reasons
         for (int i = 0; i < reasons.length; i++) {
-            // Spread out the reasons, and leave none unused
             int destination = i % numberOfClaims;
-            List<ClaimLine> lines = claimsInProgress[destination].getLines();
-            //TODO: Create claim line and add to list
-            // I suspect lists are cloned within getters,
-            // as this would make sense for concurrency,
-            // so assume we need to send the clone back in after mods.
-            claimsInProgress[destination].setLines(lines);
+            if (distributedReasons[destination] == null) {
+                distributedReasons[destination] = new ArrayList<String>();
+            }
+            distributedReasons[destination].add(reasons[i]);
         }
+
+        // Set up buckets for claims each year,
+        // which we will need to calculate plan accumulators
+        int yearsActive = (LocalDate.now().getYear() + 1) - Utils.START_YEAR;
+        ArrayList<Claim>[] timeSortedClaims = new ArrayList[yearsActive];
+        for (int i = 0; i < yearsActive; i++) {
+            timeSortedClaims[i] = new ArrayList<Claim>();
+        }
+
+        // Create the claims
+        for (int i = 0; i < numberOfClaims; i++) {
+            ArrayList<String> theseReasons = distributedReasons[i];
+            String[] reasonsSubArray = theseReasons.toArray(new String[theseReasons.size()]);
+            Claim newClaim = claimService.createClaim(
+                                                      member.getId(),
+                                                      provider.getId(),
+                                                      reasonsSubArray
+                                                      );
+            claimsInProgress[i] = newClaim;
+            int claimYear = newClaim.getServiceEndDate().getYear();
+            for (int j = 0; j < yearsActive; j++) {
+                int bucketYear = Utils.START_YEAR + j;
+                if (claimYear == bucketYear) {
+                    timeSortedClaims[j].add(newClaim);
+                }
+            }
+        }
+
+        //TODO: Make plans, enrollments, and accumulators
 
         return null;
     }
