@@ -1,5 +1,6 @@
 package com.josephcsoftware.tsgstage2.services;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,12 +68,23 @@ public class ClaimService {
         history.add(claimStatusEventService.createEvent(myId, ClaimStatus.PAID));
 
         // Set up claim lines
+        BigDecimal totalBilled = BigDecimal.valueOf(0);
+        BigDecimal totalAllowed = BigDecimal.valueOf(0);
+        BigDecimal totalPlanPaid = BigDecimal.valueOf(0);
+        BigDecimal totalMemberResponsibility = BigDecimal.valueOf(0);
         for (int i = 0; i < reasons.length; i++) {
-            lines.add(claimLineService.createLine(
-                                                  i + 1,
-                                                  myId,
-                                                  reasons[i]
-                                                  ));
+            ClaimLine line = claimLineService.createLine(
+                                                         i + 1,
+                                                         myId,
+                                                         reasons[i]
+                                                         );
+            lines.add(line);
+
+            // Add to totals
+            totalBilled.add(line.getBilledAmount());
+            totalAllowed.add(line.getAllowedAmount());
+            totalPlanPaid.add(line.getPlanPaid());
+            totalMemberResponsibility.add(line.getMemberResponsibility());
         }
         
         // Save lists
