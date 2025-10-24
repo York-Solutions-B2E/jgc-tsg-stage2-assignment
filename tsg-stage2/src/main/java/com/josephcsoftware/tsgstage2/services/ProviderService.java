@@ -1,5 +1,8 @@
 package com.josephcsoftware.tsgstage2.services;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import com.josephcsoftware.tsgstage2.Utils;
 import com.josephcsoftware.tsgstage2.models.Provider;
 import com.josephcsoftware.tsgstage2.repositories.ProviderRepository;
@@ -15,9 +18,19 @@ public class ProviderService {
         this.providerRepository = providerRepository;
     }
 
-    public Provider createProvider() {
+    public Provider findProviderById(UUID providerId) {
+        Optional<Provider> provider = providerRepository.findById(providerId);
+
+        if (provider.isPresent()) {
+            return provider.get();
+        }
+
+        return null;
+    }
+
+    public Provider createProvider(String name) {
         Provider newProvider = new Provider();
-        newProvider.setName("Dr. Leslie Wemsie");
+        newProvider.setName(name);
         newProvider.setSpecialty("Treating all surreal illnesses and hysterical injuries");
         newProvider.setAddress(Utils.randomProviderAddress());
         newProvider.setPhone("(555) 555-5555");

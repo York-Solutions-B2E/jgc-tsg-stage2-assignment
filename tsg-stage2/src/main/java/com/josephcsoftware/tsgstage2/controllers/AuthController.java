@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @CrossOrigin(origins = "${jgc.cors.origin}")
-@RequestMapping("${jgc.project.root}/auth")
+@RequestMapping("${jgc.project.root}/")
 public class AuthController {
 
     private final AuthService authService;
@@ -31,11 +31,11 @@ public class AuthController {
         // Pass the JWT to authService to check for the existence of a user; if none, make one
         User foundLogin = authService.findUserByJWT(jwt);
 
-        if (foundLogin != null) {
-            return ResponseEntity.ok().build();
+        if (foundLogin == null) {
+            // Something went very wrong, so report back
+            return ResponseEntity.badRequest().build();
         }
 
-        // Something went very wrong, so report back
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok().build();
     }
 }

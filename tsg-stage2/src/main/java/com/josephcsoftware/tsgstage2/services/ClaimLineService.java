@@ -33,8 +33,10 @@ public class ClaimLineService {
         newLine.setDescription(reason);
         newLine.setCptCode(Utils.randomCode());
 
+        long allowedAmountLong = Utils.STANDARD_ALLOWED_AMOUNT * 100;
+
         // Set standard allowed amount
-        newLine.setAllowedAmount(BigDecimal.valueOf(Utils.STANDARD_ALLOWED_AMOUNT, 2));
+        newLine.setAllowedAmount(BigDecimal.valueOf(allowedAmountLong, 2));
 
         // Set initial cost (1x to 5x of allowed amount)
         newLine.setBilledAmount(randomCost(
@@ -48,7 +50,7 @@ public class ClaimLineService {
         newLine.setCopayApplied(copay);
 
         // Set deductible
-        BigDecimal deductible = BigDecimal.valueOf(Utils.STANDARD_ALLOWED_AMOUNT, 2);
+        BigDecimal deductible = BigDecimal.valueOf(allowedAmountLong, 2);
         newLine.setDeductibleApplied(deductible);
 
         // None of these examples will meet the deductible,

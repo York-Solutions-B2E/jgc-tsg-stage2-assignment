@@ -2,6 +2,7 @@ package com.josephcsoftware.tsgstage2.services;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.josephcsoftware.tsgstage2.SimpleSession;
@@ -49,5 +50,15 @@ public class MemberService {
     public void enrollMember(Member member, ArrayList<Enrollment> enrollments) {
         member.setEnrollments(enrollments);
         memberRepository.save(member);
+    }
+
+    public Member findMemberByUserId(UUID userId) {
+        Optional<Member> member = memberRepository.findByUserId(userId);
+
+        if (member.isPresent()) {
+            return member.get();
+        }
+
+        return null;
     }
 }

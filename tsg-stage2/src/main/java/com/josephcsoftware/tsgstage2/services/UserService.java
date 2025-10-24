@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import com.josephcsoftware.tsgstage2.SimpleSession;
 import com.josephcsoftware.tsgstage2.Utils;
+import com.josephcsoftware.tsgstage2.dtos.ClaimDTO;
 import com.josephcsoftware.tsgstage2.models.Claim;
 import com.josephcsoftware.tsgstage2.models.ClaimLine;
 import com.josephcsoftware.tsgstage2.models.Enrollment;
@@ -48,6 +50,18 @@ public class UserService {
         this.enrollmentService = enrollmentService;
     }
 
+    public Member findMemberByUserId(UUID userId) {
+        return memberService.findMemberByUserId(userId);
+    }
+
+    public List<Claim> findClaimsByMemberId(UUID memberId) {
+        return claimService.findClaimsByMemberId(memberId);
+    }
+
+    public Provider findProviderById(UUID providerId) {
+        return providerService.findProviderById(providerId);
+    }
+
     // Tries to retrieve a user.
     // If this fails, then a new one is created.
     public User findUserBySession(SimpleSession session) {
@@ -82,14 +96,18 @@ public class UserService {
         Member member = memberService.createMember(userId, session);
 
         // Create the provider
-        Provider provider = providerService.createProvider();
+        Provider[] providers = {
+            providerService.createProvider("Dr. Leslie Wimsie"),
+            providerService.createProvider("Dr. Royd Reigh"),
+            providerService.createProvider("Dr. Neili Notahorse")
+        };
 
         // Collect reasons for expenses
         String[] reasons = Utils.randomReasons();
 
         // Create the claims;
         // We want about 2 lines per claim, for a proper demo.
-        int numberOfClaims = reasons.length / 2;
+        int numberOfClaims = reasons.length / 3;
         Claim[] claimsInProgress = new Claim[numberOfClaims];
         ArrayList<String>[] distributedReasons = new ArrayList[numberOfClaims];
 
@@ -114,6 +132,7 @@ public class UserService {
         for (int i = 0; i < numberOfClaims; i++) {
             ArrayList<String> theseReasons = distributedReasons[i];
             String[] reasonsSubArray = theseReasons.toArray(new String[theseReasons.size()]);
+            Provider provider = providers[ThreadLocalRandom.current().nextInt(providers.length)];
             Claim newClaim = claimService.createClaim(
                                                       member.getId(),
                                                       provider.getId(),

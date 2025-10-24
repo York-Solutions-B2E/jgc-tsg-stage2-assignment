@@ -37,6 +37,62 @@ function App() {
         failedLoginSteps.current = 2;
     }
 
+    const createGoogleLoginButton = () => {
+        return (<>
+            { checkFailedLogin() ? (
+                <p>
+                    Oops! The login attempt failed to go through.
+                    We apologize for the inconvenience.
+                    Please refresh the page, or try again later.
+                </p>
+            ) : <></> }
+            <GoogleLogin
+                onSuccess={async credentialResponse => {
+                    const authToken = credentialResponse.credential;
+                    
+                    const response = await axios.get(
+                        "http://localhost:8080/api/login", {
+                            headers: {
+                                Authorization: `Bearer ${authToken}`
+                            }
+                        }
+                    );
+                    
+                    if (response.status === HttpStatusCode.Ok) {
+                        localStorage.setItem(SESSION_TOKEN_KEY, authToken);
+
+                        // DEMO CODE
+                        const dataResponse1 = await axios.get(
+                            "http://localhost:8080/api/auth/me", {
+                                headers: {
+                                    Authorization: `Bearer ${authToken}`
+                                }
+                            }
+                        );
+                        console.log(dataResponse1);
+                        const dataResponse2 = await axios.get(
+                            "http://localhost:8080/api/dashboard", {
+                                headers: {
+                                    Authorization: `Bearer ${authToken}`
+                                }
+                            }
+                        );
+                        console.log(dataResponse2);
+                    }
+                    else {
+                        markFailedLogin();
+                    }
+                    
+                    forceUpdate();
+                }}
+                onError={() => {
+                    markFailedLogin();
+                    forceUpdate();
+                }}
+            /></>
+        );
+    }
+
     return (
         <>
             <div>
@@ -48,43 +104,9 @@ function App() {
                 </a>
             </div>
             <h1>Vite + React</h1>
-            { checkFailedLogin() ? (
-                <p>
-                    Oops! The login attempt failed to go through.
-                    We apologize for the inconvenience.
-                    Please refresh the page, or try again later.
-                </p>
-            ) : (isLoggedIn() ? (
+            { isLoggedIn() ? (
                 <p>Hello there.</p>
-            ) : (
-                <GoogleLogin
-                    onSuccess={async credentialResponse => {
-                        const authToken = credentialResponse.credential;
-                    
-                        const response = await axios.get(
-                            "http://localhost:8080/api/auth/login", {
-                                headers: {
-                                    Authorization: `Bearer ${authToken}`
-                                }
-                            }
-                        );
-
-                        if (response.status === HttpStatusCode.Ok) {
-                            localStorage.setItem(SESSION_TOKEN_KEY, authToken);
-                            //forceUpdate();
-                        }
-                        else {
-                            markFailedLogin();
-                        }
-
-                        forceUpdate();
-                    }}
-                    onError={() => {
-                        markFailedLogin();
-                        forceUpdate();
-                    }}
-                />
-            ))}
+            ) : createGoogleLoginButton() }
             <div className="card">
                 <button onClick={() => setCount((count) => count + 1)}>
                     count is {count}

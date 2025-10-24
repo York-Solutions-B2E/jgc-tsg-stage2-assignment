@@ -2,6 +2,10 @@
 
 This repo is my assignment for the TSG training solo project, from weeks 3 and 4.
 
+## Prereqs
+
+To run the back-end, you will need **OpenJDK 25**.
+
 ## Setup (Unix)
 
 At this time, the start script is only available for Unix systems (Linux, MacOS).

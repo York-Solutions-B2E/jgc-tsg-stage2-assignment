@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.josephcsoftware.tsgstage2.Utils;
+import com.josephcsoftware.tsgstage2.dtos.ClaimDTO;
 import com.josephcsoftware.tsgstage2.models.Claim;
 import com.josephcsoftware.tsgstage2.models.ClaimLine;
 import com.josephcsoftware.tsgstage2.models.ClaimStatus;
@@ -36,6 +37,10 @@ public class ClaimService {
         this.claimStatusEventService = claimStatusEventService;
     }
 
+    public List<Claim> findClaimsByMemberId(UUID memberId) {
+        return claimRepository.findClaimByMemberId(memberId);
+    }
+
     public Claim createClaim(UUID memberId, UUID providerId, String[] reasons) {
         Claim newClaim = new Claim();
 
@@ -44,15 +49,15 @@ public class ClaimService {
         newClaim.setProviderId(providerId);
 
         LocalDate occurrence = Utils.randomDateBetween(
-                                                       Utils.randomInYear(Utils.START_YEAR),
+                                                       LocalDate.ofYearDay(Utils.START_YEAR, 1),
                                                        LocalDate.now()
                                                        );
         LocalDate reviewed = occurrence.plusDays(1);
         LocalDate processed = occurrence.plusDays(2);
         LocalDate received = occurrence.plusDays(3);
 
-        ZoneOffset cstOffset = ZoneOffset.ofHours(-6);
-        OffsetTime typicalTime = OffsetTime.of(14, 0, 0, 0, cstOffset);
+        ZoneOffset utcOffset = ZoneOffset.UTC;
+        OffsetTime typicalTime = OffsetTime.of(14, 0, 0, 0, utcOffset);
         OffsetDateTime occurrenceStamp = typicalTime.atDate(occurrence);
         OffsetDateTime reviewedStamp = typicalTime.atDate(reviewed);
         OffsetDateTime processedStamp = typicalTime.atDate(processed);
